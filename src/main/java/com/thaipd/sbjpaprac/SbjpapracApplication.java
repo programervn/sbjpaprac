@@ -4,6 +4,7 @@ import com.thaipd.sbjpaprac.entity.Book;
 import com.thaipd.sbjpaprac.entity.BookPage;
 import com.thaipd.sbjpaprac.repository.BookRepository;
 import com.thaipd.sbjpaprac.repository.PageRepository;
+import com.thaipd.sbjpaprac.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /*
 references:
@@ -28,6 +30,9 @@ public class SbjpapracApplication implements CommandLineRunner {
     @Autowired
     PageRepository pageRepository;
 
+    @Autowired
+    BookService bookService;
+
     public static void main(String[] args) {
         logger.info("STARTING THE APPLICATION");
         SpringApplication.run(SbjpapracApplication.class, args);
@@ -39,7 +44,8 @@ public class SbjpapracApplication implements CommandLineRunner {
         logger.info("EXECUTING : command line runner");
         //saveBook();
         //savePage();
-        findBookPage();
+        //findBookPage();
+        findBookInfo();
     }
 
     public void findBookPage() {
@@ -55,8 +61,24 @@ public class SbjpapracApplication implements CommandLineRunner {
         logger.info("Page(s) of book : {}", book);
         for (BookPage page : bookPageList) {
             logger.info("{}", page);
-            //Book b = page.getBook();
-            //logger.info("Book: {}, {}, {}", b.getId(), b.getAuthor(), b.getIsbn());
+            Book b = page.getBook();
+            logger.info("Book: {}, {}, {}", b.getId(), b.getAuthor(), b.getIsbn());
+        }
+    }
+
+    public void findBookInfo() {
+        Long bookID = 1L;
+        // create a new book
+        Optional<Book> optionalBook = bookRepository.findById(bookID);
+        if (!optionalBook.isPresent()) {
+            logger.error("Cannot find book with id {}", bookID);
+            return;
+        }
+        Book book = optionalBook.get();
+        logger.info("Book: {}", book);
+        List<BookPage> bookPageSet = bookService.findPageByBook(book);
+        for (BookPage bookPage : bookPageSet) {
+            logger.info("Page(s): {}", bookPage);
         }
     }
 
