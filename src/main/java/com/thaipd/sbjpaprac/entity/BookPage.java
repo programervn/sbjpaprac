@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "book_pages")
-public class BookPage implements Serializable {
+public class BookPage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ references:
  */
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class SbjpapracApplication implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(SbjpapracApplication.class);
     @Autowired
@@ -45,7 +47,30 @@ public class SbjpapracApplication implements CommandLineRunner {
         //saveBook();
         //savePage();
         //findBookPage();
-        findBookInfo();
+        //findBookInfo();
+
+    }
+
+    public void findTestBookEager() {
+        Book book = bookService.findBookByID(1L).get();
+        logger.info("Book infor: {}", book);
+        logger.info("Page(s): {}", book.getPages());
+    }
+
+    public void findTestPageEager() {
+        BookPage bookPage = pageRepository.findById(1L).get();
+        logger.info("************ Page information: {}", bookPage);
+        Book book = bookPage.getBook();
+        logger.info("************ Book information from page: {}", book);
+    }
+
+    public void findTestPageLazing() {
+        BookPage bookPage = pageRepository.findById(1L).get();
+        logger.info("************ Page information: {}", bookPage);
+        //you get page, but not book
+        //Book book = bookRepository.findById(bookPage.getBook().getId()).get();
+        Book book = bookRepository.getById(bookPage.getBook().getId());
+        logger.info("************ Book information from page: {}", book);
     }
 
     public void findBookPage() {

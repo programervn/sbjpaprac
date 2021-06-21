@@ -22,6 +22,10 @@ public class BookServiceImpl implements BookService {
     @Autowired
     PageRepository pageRepository;
 
+    public Optional<Book> findBookByID(Long id) {
+        return bookRepository.findById(id);
+    }
+
     public Book findBookInfo(Long bookID) {
         // create a new book
         Optional<Book> optionalBook = bookRepository.findById(bookID);
