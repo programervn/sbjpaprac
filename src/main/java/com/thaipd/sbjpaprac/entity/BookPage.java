@@ -16,7 +16,8 @@ public class BookPage implements Serializable {
     private String content;
     private String chapter;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    //default Many To One is EAGER
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
@@ -86,12 +87,12 @@ public class BookPage implements Serializable {
     @Override
     public String toString() {
         return "Page{" +
-                "id=" + id +
-                ", number=" + pageNumber +
-                ", content='" + content + '\'' +
-                ", chapter='" + chapter + '\'' +
-                ", book_id=" + book.getId() +
-                ", book=" + book +
+                "id=" + this.id +
+                ", number=" + this.pageNumber +
+                ", content='" + this.content + '\'' +
+                ", chapter='" + this.chapter + '\'' +
+                ", book_id=" + this.book.getId() +
+                //", book=" + book +
                 '}';
     }
 }

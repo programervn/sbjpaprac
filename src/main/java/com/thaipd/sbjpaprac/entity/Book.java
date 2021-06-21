@@ -20,6 +20,7 @@ public class Book implements Serializable {
     @Column(unique = true)
     private String isbn;
 
+    //default One To Many is Lazy
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<BookPage> pages;
