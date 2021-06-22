@@ -7,18 +7,16 @@ import com.thaipd.sbjpaprac.repository.PostRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/posts")
-public class CommentController {
-    private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
+@RequestMapping("/api/v2/posts")
+public class CommentControllerV2 {
+    private static final Logger logger = LoggerFactory.getLogger(CommentControllerV2.class);
 
     @Autowired
     private CommentRepository commentRepository;
@@ -27,17 +25,16 @@ public class CommentController {
     private PostRepository postRepository;
 
     @GetMapping("/{postId}/comments")
-    public Page<Comment> getAllCommentsByPostId(@PathVariable(value = "postId") Long postId,
-                                                Pageable pageable) {
-        logger.debug("Get all comment: postid={}, {}", postId, pageable);
-        return commentRepository.findByPostId(postId, pageable);
+    public List<Comment> getAllCommentsByPostId(@PathVariable(value = "postId") Long postId) {
+        logger.debug("Get all comment: postid={}, {}", postId);
+        return commentRepository.findByPostId(postId);
     }
 
     @GetMapping("/{postId}/comments/{commentId}")
     public Comment getCommentById(@PathVariable(value = "postId") Long postId,
                                             @PathVariable (value = "commentId") Long commentId) {
         logger.debug("Get comment by: postid={}, commentId={}", postId, commentId);
-        return commentRepository.findByIdAndPostId(commentId, postId)
+        return commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("postId" + postId + "; CommentId " + commentId + "not found"));
     }
 

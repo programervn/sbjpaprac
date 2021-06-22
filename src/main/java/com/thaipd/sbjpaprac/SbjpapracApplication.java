@@ -3,7 +3,7 @@ package com.thaipd.sbjpaprac;
 import com.thaipd.sbjpaprac.entity.Book;
 import com.thaipd.sbjpaprac.entity.BookPage;
 import com.thaipd.sbjpaprac.repository.BookRepository;
-import com.thaipd.sbjpaprac.repository.PageRepository;
+import com.thaipd.sbjpaprac.repository.BookPageRepository;
 import com.thaipd.sbjpaprac.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /*
 references:
@@ -30,7 +29,7 @@ public class SbjpapracApplication implements CommandLineRunner {
     @Autowired
     BookRepository bookRepository;
     @Autowired
-    PageRepository pageRepository;
+    BookPageRepository pageRepository;
 
     @Autowired
     BookService bookService;

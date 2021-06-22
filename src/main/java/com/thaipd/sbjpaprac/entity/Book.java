@@ -1,5 +1,8 @@
 package com.thaipd.sbjpaprac.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -23,6 +26,8 @@ public class Book {
     //default One To Many is Lazy
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
+    //@JsonIgnore //OK
+    @JsonManagedReference
     private Set<BookPage> pages;
 
     public Book() {

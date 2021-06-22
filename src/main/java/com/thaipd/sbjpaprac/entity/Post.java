@@ -1,6 +1,9 @@
 package com.thaipd.sbjpaprac.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,10 +30,12 @@ public class Post extends AuditModel {
     @Lob
     private String content;
 
-//    @OneToMany(cascade = CascadeType.ALL,
-//            fetch = FetchType.LAZY,
-//            mappedBy = "post")
-//    private Set<Comment> comments = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "post")
+    //@JsonIgnore
+    //@JsonManagedReference
+    private Set<Comment> comments = new HashSet<>();
 
     //Constructor
 

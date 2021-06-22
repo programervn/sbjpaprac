@@ -3,7 +3,7 @@ package com.thaipd.sbjpaprac.service.impl;
 import com.thaipd.sbjpaprac.entity.Book;
 import com.thaipd.sbjpaprac.entity.BookPage;
 import com.thaipd.sbjpaprac.repository.BookRepository;
-import com.thaipd.sbjpaprac.repository.PageRepository;
+import com.thaipd.sbjpaprac.repository.BookPageRepository;
 import com.thaipd.sbjpaprac.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class BookServiceImpl implements BookService {
     @Autowired
     BookRepository bookRepository;
     @Autowired
-    PageRepository pageRepository;
+    BookPageRepository pageRepository;
 
     public Optional<Book> findBookByID(Long id) {
         return bookRepository.findById(id);
