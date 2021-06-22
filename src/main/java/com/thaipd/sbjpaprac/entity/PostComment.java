@@ -8,6 +8,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+//https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
+
 @Entity
 @Table(name = "comments")
 public class PostComment extends AuditModel {

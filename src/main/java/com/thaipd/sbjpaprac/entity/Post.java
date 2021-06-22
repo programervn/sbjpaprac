@@ -1,11 +1,15 @@
 package com.thaipd.sbjpaprac.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+
+//https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
 
 @Entity
 @Table(name = "posts")
@@ -31,7 +35,7 @@ public class Post extends AuditModel {
             fetch = FetchType.LAZY,
             mappedBy = "post")
     //@JsonIgnore
-    //@JsonManagedReference
+    @JsonManagedReference
     private Set<PostComment> comments = new HashSet<>();
 
     //Constructor
