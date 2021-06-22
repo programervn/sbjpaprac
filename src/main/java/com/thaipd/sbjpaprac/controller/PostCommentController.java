@@ -1,6 +1,6 @@
 package com.thaipd.sbjpaprac.controller;
 
-import com.thaipd.sbjpaprac.entity.Comment;
+import com.thaipd.sbjpaprac.entity.PostComment;
 import com.thaipd.sbjpaprac.exception.ResourceNotFoundException;
 import com.thaipd.sbjpaprac.repository.CommentRepository;
 import com.thaipd.sbjpaprac.repository.PostRepository;
@@ -13,12 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/posts")
-public class CommentController {
-    private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
+public class PostCommentController {
+    private static final Logger logger = LoggerFactory.getLogger(PostCommentController.class);
 
     @Autowired
     private CommentRepository commentRepository;
@@ -27,23 +26,23 @@ public class CommentController {
     private PostRepository postRepository;
 
     @GetMapping("/{postId}/comments")
-    public Page<Comment> getAllCommentsByPostId(@PathVariable(value = "postId") Long postId,
-                                                Pageable pageable) {
+    public Page<PostComment> getAllCommentsByPostId(@PathVariable(value = "postId") Long postId,
+                                                    Pageable pageable) {
         logger.debug("Get all comment: postid={}, {}", postId, pageable);
         return commentRepository.findByPostId(postId, pageable);
     }
 
     @GetMapping("/{postId}/comments/{commentId}")
-    public Comment getCommentById(@PathVariable(value = "postId") Long postId,
-                                            @PathVariable (value = "commentId") Long commentId) {
+    public PostComment getCommentById(@PathVariable(value = "postId") Long postId,
+                                      @PathVariable (value = "commentId") Long commentId) {
         logger.debug("Get comment by: postid={}, commentId={}", postId, commentId);
         return commentRepository.findByIdAndPostId(commentId, postId)
                 .orElseThrow(() -> new ResourceNotFoundException("postId" + postId + "; CommentId " + commentId + "not found"));
     }
 
     @PostMapping("/{postId}/comments")
-    public Comment createComment(@PathVariable (value = "postId") Long postId,
-                                 @Valid @RequestBody Comment comment) {
+    public PostComment createComment(@PathVariable (value = "postId") Long postId,
+                                     @Valid @RequestBody PostComment comment) {
         logger.debug("Create comment: postid={}, comment={}", postId, comment);
         return postRepository.findById(postId).map(post -> {
             comment.setPost(post);
@@ -52,9 +51,9 @@ public class CommentController {
     }
 
     @PutMapping("/{postId}/comments/{commentId}")
-    public Comment updateComment(@PathVariable (value = "postId") Long postId,
-                                 @PathVariable (value = "commentId") Long commentId,
-                                 @Valid @RequestBody Comment commentRequest) {
+    public PostComment updateComment(@PathVariable (value = "postId") Long postId,
+                                     @PathVariable (value = "commentId") Long commentId,
+                                     @Valid @RequestBody PostComment commentRequest) {
         logger.debug("Update comment: postid={}, commentId={}, commentRequest={}", postId, commentId, commentRequest);
         if(!postRepository.existsById(postId)) {
             throw new ResourceNotFoundException("PostId " + postId + " not found");

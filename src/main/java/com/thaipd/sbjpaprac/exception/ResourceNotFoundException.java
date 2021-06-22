@@ -14,11 +14,11 @@ public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException(String message) {
         super(message);
-        logger.warn("ResourceNotFoundException(String message)");
+        logger.warn("ResourceNotFoundException: {}", message);
     }
 
     public ResourceNotFoundException(String message, Throwable cause) {
         super(message, cause);
-        logger.warn("ResourceNotFoundException(String message, Throwable cause)");
+        logger.warn("ResourceNotFoundException: {}, {}", message, cause.getMessage());
     }
 }

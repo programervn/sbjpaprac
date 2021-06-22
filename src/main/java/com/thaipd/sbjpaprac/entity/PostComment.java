@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "comments")
-public class Comment extends AuditModel {
+public class PostComment extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,10 +27,10 @@ public class Comment extends AuditModel {
 
     //Constructor
 
-    public Comment() {
+    public PostComment() {
     }
 
-    public Comment(Long id, String text, Post post) {
+    public PostComment(Long id, String text, Post post) {
         this.id = id;
         this.text = text;
         this.post = post;

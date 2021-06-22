@@ -1,6 +1,6 @@
 package com.thaipd.sbjpaprac.repository;
 
-import com.thaipd.sbjpaprac.entity.Comment;
+import com.thaipd.sbjpaprac.entity.PostComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByPostId(Long postId);
-    Page<Comment> findByPostId(Long postId, Pageable pageable);
-    Optional<Comment> findByIdAndPostId(Long id, Long postId);
+public interface CommentRepository extends JpaRepository<PostComment, Long> {
+    List<PostComment> findByPostId(Long postId);
+    Page<PostComment> findByPostId(Long postId, Pageable pageable);
+    Optional<PostComment> findByIdAndPostId(Long id, Long postId);
 }

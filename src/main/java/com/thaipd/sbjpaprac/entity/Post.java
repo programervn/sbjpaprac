@@ -1,9 +1,6 @@
 package com.thaipd.sbjpaprac.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,7 +32,7 @@ public class Post extends AuditModel {
             mappedBy = "post")
     //@JsonIgnore
     //@JsonManagedReference
-    private Set<Comment> comments = new HashSet<>();
+    private Set<PostComment> comments = new HashSet<>();
 
     //Constructor
 
