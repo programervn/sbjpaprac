@@ -72,7 +72,7 @@ public class LibraryController {
     public ResponseEntity<Library> getById(@PathVariable Integer id) {
         Optional<Library> optionalLibrary = libraryRepository.findById(id);
         if (!optionalLibrary.isPresent()) {
-            return ResponseEntity.unprocessableEntity().build();
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(optionalLibrary.get());
