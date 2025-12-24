@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: sbjpaprac
+
+  datasource:
+    url: jdbc:oracle:thin:@//10.3.2.186:1521/XEPDB1
+    username: vivas
+    password: Vivas115
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+
+---
+spring:
+  profiles:
+    active: dev
+  config:
+    activate:
+      on-profile: dev
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        default_schema: VIVAS
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: false
