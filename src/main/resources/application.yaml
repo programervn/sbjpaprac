@@ -21,8 +21,9 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: validate #Check if the entities have the same structure in the database the entities have the same structure in the database
+    show-sql: true #Show the queries that are created for Spring Data
+    generate-ddl: false # Switches the feature on and off and is vendor independent
     properties:
       hibernate:
         default_schema: VIVAS
@@ -32,15 +33,3 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
-
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-
-  jpa:
-    open-in-view: false
-    hibernate:
-      ddl-auto: update
-    show-sql: false

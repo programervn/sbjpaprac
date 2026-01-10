@@ -8,6 +8,8 @@ import com.thaipd.sbjpaprac.dto.UserUpdateRequest;
 import com.thaipd.sbjpaprac.entity.User;
 import com.thaipd.sbjpaprac.repository.UserRepository;
 import com.thaipd.sbjpaprac.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,84 +17,190 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Profile("sample")
 public class UserServiceImpl implements UserService {
+
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	private final UserRepository userRepository;
 
 	public UserServiceImpl(UserRepository userRepository) {
 		this.userRepository = userRepository;
+		logger.info("UserServiceImpl initialized with UserRepository: {}", userRepository.getClass().getSimpleName());
 	}
 
 	@Override
 	@Transactional
 	public UserResponse create(UserCreateRequest request) {
+		logger.debug("Creating new user with username: {}, email: {}", request.getUsername(), request.getEmail());
+		
 		if (userRepository.existsByUsername(request.getUsername())) {
-			throw new BadRequestException("Username already exists");
+			String errorMsg = String.format("Username '%s' already exists", request.getUsername());
+			logger.warn(errorMsg);
+			throw new BadRequestException(errorMsg);
 		}
 		if (userRepository.existsByEmail(request.getEmail())) {
-			throw new BadRequestException("Email already exists");
+			String errorMsg = String.format("Email '%s' already exists", request.getEmail());
+			logger.warn(errorMsg);
+			throw new BadRequestException(errorMsg);
 		}
 
-		User user = new User();
-		user.setUsername(request.getUsername());
-		user.setEmail(request.getEmail());
-		return toResponse(userRepository.save(user));
+		try {
+			User user = new User();
+			user.setUsername(request.getUsername());
+			user.setEmail(request.getEmail());
+			
+			User savedUser = userRepository.save(user);
+			if (savedUser != null) {
+				logger.info("Successfully created user with ID: {}, username: {}", 
+					savedUser.getId(), savedUser.getUsername());
+			} else {
+				logger.error("Failed to create user - saved user is null");
+			}
+			return toResponse(savedUser);
+		} catch (Exception e) {
+			logger.error("Error creating user: {}", e.getMessage(), e);
+			throw e;
+		}
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public UserResponse getById(long id) {
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new NotFoundException("User not found"));
-		return toResponse(user);
+		logger.debug("Fetching user by ID: {}", id);
+		try {
+			User user = userRepository.findById(id)
+					.orElseThrow(() -> {
+						String errorMsg = String.format("User with ID %d not found", id);
+						logger.warn(errorMsg);
+						return new NotFoundException(errorMsg);
+					});
+			if (logger.isDebugEnabled() && user != null) {
+				logger.debug("Successfully retrieved user with ID: {}", id);
+			}
+			return toResponse(user);
+		} catch (Exception e) {
+			logger.error("Error fetching user with ID {}: {}", id, e.getMessage(), e);
+			throw e;
+		}
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<UserResponse> list(Pageable pageable) {
-		return userRepository.findAll(pageable).map(this::toResponse);
+		logger.debug("Fetching user list with page: {}, size: {}", 
+			pageable.getPageNumber(), pageable.getPageSize());
+			
+		try {
+			Page<UserResponse> result = userRepository.findAll(pageable).map(this::toResponse);
+			if (logger.isDebugEnabled() && result != null) {
+				logger.debug("Retrieved {} users out of {} total", 
+					result.getNumberOfElements(), result.getTotalElements());
+			}
+			return result;
+		} catch (Exception e) {
+			logger.error("Error fetching user list: {}", e.getMessage(), e);
+			throw e;
+		}
 	}
 
 	@Override
 	@Transactional
 	public UserResponse update(long id, UserUpdateRequest request) {
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new NotFoundException("User not found"));
+		logger.debug("Updating user with ID: {}", id);
+		try {
+			User user = userRepository.findById(id)
+					.orElseThrow(() -> {
+						String errorMsg = String.format("User with ID %d not found for update", id);
+						logger.warn(errorMsg);
+						return new NotFoundException(errorMsg);
+					});
 
-		if (request.getUsername() != null && !request.getUsername().isBlank()) {
-			if (!request.getUsername().equals(user.getUsername()) && userRepository.existsByUsername(request.getUsername())) {
-				throw new BadRequestException("Username already exists");
+			boolean updated = false;
+
+			if (request.getUsername() != null && !request.getUsername().isBlank() && 
+				!request.getUsername().equals(user.getUsername())) {
+				if (userRepository.existsByUsername(request.getUsername())) {
+					String errorMsg = String.format("Username '%s' already exists", request.getUsername());
+					logger.warn(errorMsg);
+					throw new BadRequestException(errorMsg);
+				}
+				logger.debug("Updating username for user ID: {}", id);
+				user.setUsername(request.getUsername());
+				updated = true;
 			}
-			user.setUsername(request.getUsername());
-		}
 
-		if (request.getEmail() != null && !request.getEmail().isBlank()) {
-			if (!request.getEmail().equals(user.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
-				throw new BadRequestException("Email already exists");
+			if (request.getEmail() != null && !request.getEmail().isBlank() && 
+			!request.getEmail().equals(user.getEmail())) {
+				if (userRepository.existsByEmail(request.getEmail())) {
+					String errorMsg = String.format("Email '%s' already exists", request.getEmail());
+					logger.warn(errorMsg);
+					throw new BadRequestException(errorMsg);
+				}
+				logger.debug("Updating email for user ID: {}", id);
+				user.setEmail(request.getEmail());
+				updated = true;
 			}
-			user.setEmail(request.getEmail());
-		}
 
-		return toResponse(userRepository.save(user));
+			if (updated) {
+				User updatedUser = userRepository.save(user);
+				if (updatedUser != null) {
+					logger.info("Successfully updated user with ID: {}", id);
+				} else {
+					logger.error("Failed to update user - updated user is null for ID: {}", id);
+				}
+				return toResponse(updatedUser);
+			} else {
+				if (logger.isDebugEnabled()) {
+					logger.debug("No changes detected for user ID: {}", id);
+				}
+				return toResponse(user);
+			}
+		} catch (Exception e) {
+			logger.error("Error updating user with ID {}: {}", id, e.getMessage(), e);
+			throw e;
+		}
 	}
 
 	@Override
 	@Transactional
 	public void delete(long id) {
-		if (!userRepository.existsById(id)) {
-			throw new NotFoundException("User not found");
+		logger.debug("Deleting user with ID: {}", id);
+		try {
+			if (!userRepository.existsById(id)) {
+				String errorMsg = String.format("User with ID %d not found for deletion", id);
+				logger.warn(errorMsg);
+				throw new NotFoundException(errorMsg);
+			}
+			
+			userRepository.deleteById(id);
+			if (logger.isInfoEnabled()) {
+				logger.info("Successfully deleted user with ID: {}", id);
+			}
+		} catch (Exception e) {
+			logger.error("Error deleting user with ID {}: {}", id, e.getMessage(), e);
+			throw e;
 		}
-		userRepository.deleteById(id);
 	}
 
 	private UserResponse toResponse(User user) {
-		UserResponse r = new UserResponse();
-		r.setId(user.getId());
-		r.setUsername(user.getUsername());
-		r.setEmail(user.getEmail());
-		r.setCreatedAt(user.getCreatedAt());
-		r.setUpdatedAt(user.getUpdatedAt());
-		return r;
+		try {
+			if (user == null) {
+				if (logger.isWarnEnabled()) {
+					logger.warn("Attempted to convert null User to UserResponse");
+				}
+				return null;
+			}
+			
+			UserResponse r = new UserResponse();
+			r.setId(user.getId());
+			r.setUsername(user.getUsername());
+			r.setEmail(user.getEmail());
+			r.setCreatedAt(user.getCreatedAt());
+			r.setUpdatedAt(user.getUpdatedAt());
+			return r;
+		} catch (Exception e) {
+			logger.error("Error converting User to UserResponse: {}", e.getMessage(), e);
+			throw e;
+		}
 	}
 }

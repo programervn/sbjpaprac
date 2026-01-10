@@ -1,0 +1,47 @@
+-- 1. Bảng CURRENCY
+CREATE TABLE currency (
+    currency_id             NUMBER(19) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    code           VARCHAR2(4) NOT NULL,
+    symbol         VARCHAR2(4) NOT NULL,
+    description    VARCHAR2(30) NOT NULL,
+    decimal_places NUMBER(10) NOT NULL,
+    enabled        NUMBER(1) DEFAULT 1 NOT NULL CHECK (enabled IN (0, 1))
+);
+
+-- 2. Bảng COUNTRY
+CREATE TABLE country (
+    country_id          NUMBER(19) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    code        VARCHAR2(4) NOT NULL,
+    name        VARCHAR2(30) NOT NULL,
+    locale      VARCHAR2(6) NOT NULL,
+    time_zone   VARCHAR2(10) NOT NULL,
+    currency_id NUMBER(19) NOT NULL REFERENCES currency(currency_id),
+    enabled     NUMBER(1) DEFAULT 1 NOT NULL CHECK (enabled IN (0, 1))
+);
+
+-- 3. Bảng STATE
+CREATE TABLE state (
+    state_id         NUMBER(19) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    code       VARCHAR2(6) NOT NULL,
+    name       VARCHAR2(30) NOT NULL,
+    enabled    NUMBER(1) DEFAULT 1 NOT NULL CHECK (enabled IN (0, 1)),
+    country_id NUMBER(19) NOT NULL REFERENCES country(country_id)
+);
+
+-- 4. Bảng CITY
+CREATE TABLE city (
+    city_id       NUMBER(19) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name     VARCHAR2(80) NOT NULL,
+    enabled  NUMBER(1) DEFAULT 1 NOT NULL CHECK (enabled IN (0, 1)),
+    state_id NUMBER(19) NOT NULL REFERENCES state(state_id)
+);
+
+-- 5. Indexes
+-- Oracle tự động tạo index cho Primary Key, ta chỉ cần tạo index phụ
+CREATE INDEX idx_currency_code ON currency(code);
+CREATE INDEX idx_country_code ON country(code);
+CREATE INDEX idx_state_code ON state(code);
+CREATE INDEX idx_city_name ON city(name);
+
+-- 6. Sequence cho Hibernate (Nếu dùng GenerationType.SEQUENCE)
+-- CREATE SEQUENCE hibernate_sequence START WITH 1 INCREMENT BY 1;
