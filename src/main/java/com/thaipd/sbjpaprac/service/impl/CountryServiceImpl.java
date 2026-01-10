@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,6 +37,12 @@ public class CountryServiceImpl implements CountryService {
 		}
 
 		return response;
+	}
+
+	@Override
+	public List<CountryDTO> getByCode(String code) {
+		List<Country> countries = repository.findByCode(code);
+		return ApiMapper.INSTANCE.entityToDTO(countries);
 	}
 
 	public CountryDTO save(CountryDTO currency) {

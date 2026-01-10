@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import com.thaipd.sbjpaprac.dto.CountryDTO;
 import com.thaipd.sbjpaprac.service.CountryService;
 
@@ -22,6 +24,12 @@ public class CountryController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<CountryDTO> getById(@PathVariable Long id) {
         CountryDTO response = countryService.getById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/code/{code}")
+    public ResponseEntity<List<CountryDTO>> getByCode(@PathVariable String code) {
+        List<CountryDTO> response = countryService.getByCode(code);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

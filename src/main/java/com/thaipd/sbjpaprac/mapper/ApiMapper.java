@@ -4,6 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 import com.thaipd.sbjpaprac.entity.Country;
 import com.thaipd.sbjpaprac.entity.Currency;
 
@@ -24,6 +26,8 @@ public interface ApiMapper {
     Currency DTOToEntity(CurrencyDTO currencyDTO);
 
     CountryDTO entityToDTO(Country country);
+
+    List<CountryDTO> entityToDTO(List<Country> countries);
 
     Country DTOToEntity(CountryDTO country);
 }
