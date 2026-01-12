@@ -1,6 +1,7 @@
 package com.thaipd.sbjpaprac.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,4 +49,9 @@ public class Country implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CURRENCY_ID", nullable = false)
     private Currency currency;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id", nullable = false, updatable = false, insertable = false)
+    @OrderBy(value = "code")
+    private List<State> states;
 }

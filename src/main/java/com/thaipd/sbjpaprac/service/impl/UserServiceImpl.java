@@ -10,7 +10,6 @@ import com.thaipd.sbjpaprac.repository.UserRepository;
 import com.thaipd.sbjpaprac.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public UserResponse create(UserCreateRequest request) {
 		logger.debug("Creating new user with username: {}, email: {}", request.getUsername(), request.getEmail());
-		
+
 		if (userRepository.existsByUsername(request.getUsername())) {
 			String errorMsg = String.format("Username '%s' already exists", request.getUsername());
 			logger.warn(errorMsg);
@@ -48,11 +47,11 @@ public class UserServiceImpl implements UserService {
 			User user = new User();
 			user.setUsername(request.getUsername());
 			user.setEmail(request.getEmail());
-			
+
 			User savedUser = userRepository.save(user);
 			if (savedUser != null) {
-				logger.info("Successfully created user with ID: {}, username: {}", 
-					savedUser.getId(), savedUser.getUsername());
+				logger.info("Successfully created user with ID: {}, username: {}",
+						savedUser.getId(), savedUser.getUsername());
 			} else {
 				logger.error("Failed to create user - saved user is null");
 			}
@@ -87,14 +86,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<UserResponse> list(Pageable pageable) {
-		logger.debug("Fetching user list with page: {}, size: {}", 
-			pageable.getPageNumber(), pageable.getPageSize());
-			
+		logger.debug("Fetching user list with page: {}, size: {}",
+				pageable.getPageNumber(), pageable.getPageSize());
+
 		try {
 			Page<UserResponse> result = userRepository.findAll(pageable).map(this::toResponse);
 			if (logger.isDebugEnabled() && result != null) {
-				logger.debug("Retrieved {} users out of {} total", 
-					result.getNumberOfElements(), result.getTotalElements());
+				logger.debug("Retrieved {} users out of {} total",
+						result.getNumberOfElements(), result.getTotalElements());
 			}
 			return result;
 		} catch (Exception e) {
@@ -117,8 +116,8 @@ public class UserServiceImpl implements UserService {
 
 			boolean updated = false;
 
-			if (request.getUsername() != null && !request.getUsername().isBlank() && 
-				!request.getUsername().equals(user.getUsername())) {
+			if (request.getUsername() != null && !request.getUsername().isBlank() &&
+					!request.getUsername().equals(user.getUsername())) {
 				if (userRepository.existsByUsername(request.getUsername())) {
 					String errorMsg = String.format("Username '%s' already exists", request.getUsername());
 					logger.warn(errorMsg);
@@ -129,8 +128,8 @@ public class UserServiceImpl implements UserService {
 				updated = true;
 			}
 
-			if (request.getEmail() != null && !request.getEmail().isBlank() && 
-			!request.getEmail().equals(user.getEmail())) {
+			if (request.getEmail() != null && !request.getEmail().isBlank() &&
+					!request.getEmail().equals(user.getEmail())) {
 				if (userRepository.existsByEmail(request.getEmail())) {
 					String errorMsg = String.format("Email '%s' already exists", request.getEmail());
 					logger.warn(errorMsg);
@@ -171,7 +170,7 @@ public class UserServiceImpl implements UserService {
 				logger.warn(errorMsg);
 				throw new NotFoundException(errorMsg);
 			}
-			
+
 			userRepository.deleteById(id);
 			if (logger.isInfoEnabled()) {
 				logger.info("Successfully deleted user with ID: {}", id);
@@ -190,7 +189,7 @@ public class UserServiceImpl implements UserService {
 				}
 				return null;
 			}
-			
+
 			UserResponse r = new UserResponse();
 			r.setId(user.getId());
 			r.setUsername(user.getUsername());

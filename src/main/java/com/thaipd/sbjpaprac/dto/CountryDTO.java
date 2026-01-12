@@ -1,6 +1,7 @@
 package com.thaipd.sbjpaprac.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,4 +21,5 @@ public class CountryDTO implements Serializable {
     private Boolean enabled;
 
     private CurrencyDTO currency;
+    private List<StateDTO> states;
 }
