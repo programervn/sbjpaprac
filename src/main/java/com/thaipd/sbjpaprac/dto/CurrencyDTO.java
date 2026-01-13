@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor // Bắt buộc phải có đối với JPA Entity
+@NoArgsConstructor
 @AllArgsConstructor
 public class CurrencyDTO implements Serializable {
     private Long currencyId;
@@ -19,4 +19,6 @@ public class CurrencyDTO implements Serializable {
     private Integer decimalPlaces;
 
     private String symbol;
+
+    private AuditDTO audit;
 }

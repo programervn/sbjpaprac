@@ -1,8 +1,10 @@
 package com.thaipd.sbjpaprac.common.exception;
 
 import com.thaipd.sbjpaprac.common.error.ErrorCode;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class ApiException extends RuntimeException {
 	private final HttpStatus status;
 	private final ErrorCode code;
@@ -19,15 +21,4 @@ public class ApiException extends RuntimeException {
 		this.details = details;
 	}
 
-	public HttpStatus getStatus() {
-		return status;
-	}
-
-	public ErrorCode getCode() {
-		return code;
-	}
-
-	public String getDetails() {
-		return details;
-	}
 }
