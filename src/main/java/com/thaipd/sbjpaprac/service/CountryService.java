@@ -13,5 +13,5 @@ public interface CountryService {
 
 	CountryDTO update(CountryDTO country);
 
-	void delete(Long id);
+	void delete(Long id) throws InterruptedException;
 }

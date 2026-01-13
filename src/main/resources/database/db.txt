@@ -1,3 +1,12 @@
+-- Database Server: Oracle
+-- Database Version: 23c
+-- Database Host: localhost
+-- Database Port: 1521
+-- Database Name: sbjpaprac
+-- Database User: sbjpaprac
+-- Database Password: sbjpaprac
+
+-- V1.0
 -- 1. Bảng CURRENCY
 CREATE TABLE currency (
     currency_id             NUMBER(19) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -45,3 +54,37 @@ CREATE INDEX idx_city_name ON city(name);
 
 -- 6. Sequence cho Hibernate (Nếu dùng GenerationType.SEQUENCE)
 -- CREATE SEQUENCE hibernate_sequence START WITH 1 INCREMENT BY 1;
+
+-- V2.0 
+-- Cập nhật bảng CURRENCY
+ALTER TABLE "CURRENCY" ADD (
+    "CREATED_AT" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "UPDATED_AT" TIMESTAMP
+);
+
+-- Cập nhật bảng COUNTRY
+ALTER TABLE "COUNTRY" ADD (
+    "CREATED_AT" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "UPDATED_AT" TIMESTAMP
+);
+
+-- Cập nhật bảng STATE
+ALTER TABLE "STATE" ADD (
+    "CREATED_AT" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "UPDATED_AT" TIMESTAMP
+);
+
+-- Cập nhật bảng CITY
+ALTER TABLE "CITY" ADD (
+    "CREATED_AT" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "UPDATED_AT" TIMESTAMP
+);
+
+-- V3.0
+ALTER TABLE currency ADD (version NUMBER DEFAULT 0 NOT NULL);
+
+ALTER TABLE country ADD (version NUMBER DEFAULT 0 NOT NULL);
+
+ALTER TABLE state ADD (version NUMBER DEFAULT 0 NOT NULL);
+
+ALTER TABLE city ADD (version NUMBER DEFAULT 0 NOT NULL);

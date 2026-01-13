@@ -101,7 +101,7 @@ class CountryServiceImplTest {
     }
 
     @Test
-    void delete_WhenExists_SetsEnabledFalse() {
+    void delete_WhenExists_SetsEnabledFalse() throws InterruptedException {
         Long id = 1L;
         Country country = new Country();
         country.setCountryId(id);

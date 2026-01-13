@@ -46,7 +46,7 @@ public class CountryController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws InterruptedException {
 
         try {
 
