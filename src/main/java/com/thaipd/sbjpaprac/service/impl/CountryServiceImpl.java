@@ -37,6 +37,7 @@ public class CountryServiceImpl implements CountryService {
 		this.validator = validator;
 	}
 
+	@Transactional
 	public CountryDTO getById(Long id) {
 		CountryDTO response = null;
 		Optional<Country> country = countryRepository.findById(id);

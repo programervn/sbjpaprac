@@ -19,6 +19,7 @@ public class CountryDTO implements Serializable {
     private String locale;
     private String timeZone;
     private Boolean enabled;
+    private Long currencyId;
 
     private CurrencyDTO currency;
     private List<StateDTO> states;

@@ -22,11 +22,13 @@ public interface ApiMapper {
 
     Currency DTOToEntity(CurrencyDTO currency);
 
+    @Mapping(source = "currency.currencyId", target = "currencyId")
     CountryDTO entityToDTO(Country country);
 
     List<CountryDTO> entityToDTO(List<Country> countries);
 
     @Mapping(target = "states", ignore = true)
+    @Mapping(source = "currencyId", target = "currency.currencyId")
     Country DTOToEntity(CountryDTO country);
 
     @Mapping(target = "country", ignore = true) // Exclude the country element to prevent a recursive mapping

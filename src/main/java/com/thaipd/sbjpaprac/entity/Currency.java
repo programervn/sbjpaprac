@@ -25,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Currency implements Serializable {
+public class Currency extends Base implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

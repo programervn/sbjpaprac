@@ -21,4 +21,5 @@ public class CurrencyDTO implements Serializable {
     private String symbol;
 
     private AuditDTO audit;
+    private Long version;
 }

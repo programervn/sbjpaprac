@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor // Bắt buộc phải có đối với JPA Entity
 @AllArgsConstructor
-public class State implements Serializable {
+public class State extends Base implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "STATE_ID")

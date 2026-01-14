@@ -25,7 +25,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor // Bắt buộc phải có đối với JPA Entity
 @AllArgsConstructor
-public class Country implements Serializable {
+public class Country extends Base implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COUNTRY_ID")

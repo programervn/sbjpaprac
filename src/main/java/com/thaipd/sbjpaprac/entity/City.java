@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor // Bắt buộc phải có đối với JPA Entity
 @AllArgsConstructor
-public class City implements Serializable {
+public class City extends Base implements Serializable {
 	private Long id;
 	private String name;
 	private Boolean enabled;

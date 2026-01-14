@@ -3,6 +3,7 @@ package com.thaipd.sbjpaprac.service.impl;
 import com.thaipd.sbjpaprac.dto.CountryDTO;
 import com.thaipd.sbjpaprac.entity.Country;
 import com.thaipd.sbjpaprac.repository.CountryRepository;
+import com.thaipd.sbjpaprac.repository.StateRepository;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,9 @@ class CountryServiceImplTest {
 
     @Mock
     private CountryRepository repository;
+
+    @Mock
+    private StateRepository stateRepository;
 
     @Mock
     private Validator validator;
