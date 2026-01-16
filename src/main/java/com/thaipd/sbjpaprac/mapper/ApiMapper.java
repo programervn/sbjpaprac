@@ -2,7 +2,6 @@ package com.thaipd.sbjpaprac.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -15,8 +14,6 @@ import com.thaipd.sbjpaprac.dto.StateDTO;
 
 @Mapper(componentModel = "spring")
 public interface ApiMapper {
-
-    ApiMapper INSTANCE = Mappers.getMapper(ApiMapper.class);
 
     CurrencyDTO entityToDTO(Currency currency);
 

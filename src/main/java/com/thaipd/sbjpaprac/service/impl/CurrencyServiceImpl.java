@@ -20,11 +20,13 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 	CurrencyRepository repository;
 	Validator validator;
+	ApiMapper apiMapper;
 
 	@Autowired
-	public CurrencyServiceImpl(CurrencyRepository repository, Validator validator) {
+	public CurrencyServiceImpl(CurrencyRepository repository, Validator validator, ApiMapper apiMapper) {
 		this.repository = repository;
 		this.validator = validator;
+		this.apiMapper = apiMapper;
 	}
 
 	public CurrencyDTO getById(Long id) {
@@ -32,7 +34,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 		Optional<Currency> currency = repository.findById(id);
 
 		if (currency.isPresent()) {
-			response = ApiMapper.INSTANCE.entityToDTO(currency.get());
+			response = apiMapper.entityToDTO(currency.get());
 		}
 
 		return response;
@@ -56,7 +58,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	}
 
 	private CurrencyDTO saveInformation(CurrencyDTO currency) {
-		Currency entity = ApiMapper.INSTANCE.DTOToEntity(currency);
+		Currency entity = apiMapper.DTOToEntity(currency);
 
 		Set<ConstraintViolation<Currency>> violations = validator.validate(entity);
 		if (!violations.isEmpty()) {
@@ -65,6 +67,6 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 		Currency savedEntity = repository.save(entity);
 
-		return ApiMapper.INSTANCE.entityToDTO(savedEntity);
+		return apiMapper.entityToDTO(savedEntity);
 	}
 }

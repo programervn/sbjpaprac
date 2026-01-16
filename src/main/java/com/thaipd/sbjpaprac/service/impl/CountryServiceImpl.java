@@ -28,13 +28,15 @@ public class CountryServiceImpl implements CountryService {
 	CountryRepository countryRepository;
 	StateRepository stateRepository;
 	Validator validator;
+	ApiMapper apiMapper;
 
 	@Autowired
 	public CountryServiceImpl(CountryRepository countryRepository, StateRepository stateRepository,
-			Validator validator) {
+			Validator validator, ApiMapper apiMapper) {
 		this.countryRepository = countryRepository;
 		this.stateRepository = stateRepository;
 		this.validator = validator;
+		this.apiMapper = apiMapper;
 	}
 
 	@Transactional
@@ -43,7 +45,7 @@ public class CountryServiceImpl implements CountryService {
 		Optional<Country> country = countryRepository.findById(id);
 
 		if (country.isPresent()) {
-			response = ApiMapper.INSTANCE.entityToDTO(country.get());
+			response = apiMapper.entityToDTO(country.get());
 		}
 
 		return response;
@@ -52,7 +54,7 @@ public class CountryServiceImpl implements CountryService {
 	@Override
 	public List<CountryDTO> getByCode(String code) {
 		List<Country> countries = countryRepository.findByCode(code);
-		return ApiMapper.INSTANCE.entityToDTO(countries);
+		return apiMapper.entityToDTO(countries);
 	}
 
 	public CountryDTO save(CountryDTO currency) {
@@ -87,7 +89,7 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	private CountryDTO saveInformation(CountryDTO country) {
-		Country entity = ApiMapper.INSTANCE.DTOToEntity(country);
+		Country entity = apiMapper.DTOToEntity(country);
 		Country savedEntity = countryRepository.save(entity);
 
 		Set<ConstraintViolation<Country>> violations = validator.validate(entity);
@@ -95,6 +97,6 @@ public class CountryServiceImpl implements CountryService {
 			throw new ConstraintViolationException(violations);
 		}
 
-		return ApiMapper.INSTANCE.entityToDTO(savedEntity);
+		return apiMapper.entityToDTO(savedEntity);
 	}
 }
