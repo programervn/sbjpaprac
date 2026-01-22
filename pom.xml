@@ -27,8 +27,8 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>25</java.version>
-		<oracle.jdbc.version>21.20.0.0</oracle.jdbc.version>
+		<java.version>21</java.version>
+		<oracle.jdbc.version>23.26.0.0.0</oracle.jdbc.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<lombok.version>1.18.42</lombok.version>
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
