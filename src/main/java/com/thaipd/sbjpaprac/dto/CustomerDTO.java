@@ -1,9 +1,16 @@
 package com.thaipd.sbjpaprac.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+
+@Builder
 public record CustomerDTO(
                 Long customerId,
-                String name,
+                String firstName,
+                String lastName,
+                String fullName,
                 String address,
-                String website,
-                Long creditLimit) {
+                String urlWebsite,
+                Long creditLimit,
+                @JsonProperty("trangthai") Long status) {
 }
