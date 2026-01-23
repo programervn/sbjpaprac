@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.thaipd.sbjpaprac.dto.CountryDTO;
 import com.thaipd.sbjpaprac.entity.Country;
 import com.thaipd.sbjpaprac.entity.State;
-import com.thaipd.sbjpaprac.mapper.ApiMapper;
+import com.thaipd.sbjpaprac.mapper.CountryMapper;
 import com.thaipd.sbjpaprac.repository.CountryRepository;
 import com.thaipd.sbjpaprac.repository.StateRepository;
 import com.thaipd.sbjpaprac.service.CountryService;
@@ -28,15 +28,15 @@ public class CountryServiceImpl implements CountryService {
 	CountryRepository countryRepository;
 	StateRepository stateRepository;
 	Validator validator;
-	ApiMapper apiMapper;
+	CountryMapper countryMapper;
 
 	@Autowired
 	public CountryServiceImpl(CountryRepository countryRepository, StateRepository stateRepository,
-			Validator validator, ApiMapper apiMapper) {
+			Validator validator, CountryMapper countryMapper) {
 		this.countryRepository = countryRepository;
 		this.stateRepository = stateRepository;
 		this.validator = validator;
-		this.apiMapper = apiMapper;
+		this.countryMapper = countryMapper;
 	}
 
 	@Transactional
@@ -46,7 +46,7 @@ public class CountryServiceImpl implements CountryService {
 		Optional<Country> country = countryRepository.findById(id);
 
 		if (country.isPresent()) {
-			response = apiMapper.entityToDTO(country.get());
+			response = countryMapper.toDTO(country.get());
 		} else {
 			log.warn("Country not found with id: {}", id);
 		}
@@ -58,7 +58,7 @@ public class CountryServiceImpl implements CountryService {
 	public List<CountryDTO> getByCode(String code) {
 		log.debug("Fetching countries by code: {}", code);
 		List<Country> countries = countryRepository.findByCode(code);
-		return apiMapper.entityToDTO(countries);
+		return countryMapper.toDTOList(countries);
 	}
 
 	public CountryDTO save(CountryDTO currency) {
@@ -95,7 +95,7 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	private CountryDTO saveInformation(CountryDTO country) {
-		Country entity = apiMapper.DTOToEntity(country);
+		Country entity = countryMapper.toEntity(country);
 		Country savedEntity = countryRepository.save(entity);
 
 		Set<ConstraintViolation<Country>> violations = validator.validate(entity);
@@ -103,6 +103,6 @@ public class CountryServiceImpl implements CountryService {
 			throw new ConstraintViolationException(violations);
 		}
 
-		return apiMapper.entityToDTO(savedEntity);
+		return countryMapper.toDTO(savedEntity);
 	}
 }

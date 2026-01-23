@@ -2,7 +2,7 @@ package com.thaipd.sbjpaprac.service.impl;
 
 import com.thaipd.sbjpaprac.dto.CurrencyDTO;
 import com.thaipd.sbjpaprac.entity.Currency;
-import com.thaipd.sbjpaprac.mapper.ApiMapper;
+import com.thaipd.sbjpaprac.mapper.CurrencyMapper;
 import com.thaipd.sbjpaprac.repository.CurrencyRepository;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class CurrencyServiceImplTest {
     private Validator validator;
 
     @Mock
-    private ApiMapper apiMapper;
+    private CurrencyMapper currencyMapper;
 
     @InjectMocks
     private CurrencyServiceImpl currencyService;
@@ -45,7 +45,7 @@ class CurrencyServiceImplTest {
         currencyDTO.setCode("USD");
 
         when(repository.findById(id)).thenReturn(Optional.of(currency));
-        when(apiMapper.entityToDTO(currency)).thenReturn(currencyDTO);
+        when(currencyMapper.toDTO(currency)).thenReturn(currencyDTO);
 
         CurrencyDTO result = currencyService.getById(id);
 
@@ -72,10 +72,10 @@ class CurrencyServiceImplTest {
         Currency entity = new Currency();
         entity.setCode("USD");
 
-        when(apiMapper.DTOToEntity(dto)).thenReturn(entity);
+        when(currencyMapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(any(Currency.class))).thenReturn(entity);
         when(validator.validate(any(Currency.class))).thenReturn(Collections.emptySet());
-        when(apiMapper.entityToDTO(entity)).thenReturn(dto);
+        when(currencyMapper.toDTO(entity)).thenReturn(dto);
 
         CurrencyDTO result = currencyService.save(dto);
 

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.thaipd.sbjpaprac.dto.CurrencyDTO;
 import com.thaipd.sbjpaprac.entity.Currency;
-import com.thaipd.sbjpaprac.mapper.ApiMapper;
+import com.thaipd.sbjpaprac.mapper.CurrencyMapper;
 import com.thaipd.sbjpaprac.repository.CurrencyRepository;
 import com.thaipd.sbjpaprac.service.CurrencyService;
 
@@ -22,13 +22,13 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 	CurrencyRepository repository;
 	Validator validator;
-	ApiMapper apiMapper;
+	CurrencyMapper currencyMapper;
 
 	@Autowired
-	public CurrencyServiceImpl(CurrencyRepository repository, Validator validator, ApiMapper apiMapper) {
+	public CurrencyServiceImpl(CurrencyRepository repository, Validator validator, CurrencyMapper currencyMapper) {
 		this.repository = repository;
 		this.validator = validator;
-		this.apiMapper = apiMapper;
+		this.currencyMapper = currencyMapper;
 	}
 
 	public CurrencyDTO getById(Long id) {
@@ -37,7 +37,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 		Optional<Currency> currency = repository.findById(id);
 
 		if (currency.isPresent()) {
-			response = apiMapper.entityToDTO(currency.get());
+			response = currencyMapper.toDTO(currency.get());
 		} else {
 			log.warn("Currency not found with id: {}", id);
 		}
@@ -69,7 +69,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	}
 
 	private CurrencyDTO saveInformation(CurrencyDTO currency) {
-		Currency entity = apiMapper.DTOToEntity(currency);
+		Currency entity = currencyMapper.toEntity(currency);
 
 		Set<ConstraintViolation<Currency>> violations = validator.validate(entity);
 		if (!violations.isEmpty()) {
@@ -78,6 +78,6 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 		Currency savedEntity = repository.save(entity);
 
-		return apiMapper.entityToDTO(savedEntity);
+		return currencyMapper.toDTO(savedEntity);
 	}
 }

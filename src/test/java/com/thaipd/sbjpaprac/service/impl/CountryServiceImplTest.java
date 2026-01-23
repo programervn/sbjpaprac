@@ -2,7 +2,7 @@ package com.thaipd.sbjpaprac.service.impl;
 
 import com.thaipd.sbjpaprac.dto.CountryDTO;
 import com.thaipd.sbjpaprac.entity.Country;
-import com.thaipd.sbjpaprac.mapper.ApiMapper;
+import com.thaipd.sbjpaprac.mapper.CountryMapper;
 import com.thaipd.sbjpaprac.repository.CountryRepository;
 import com.thaipd.sbjpaprac.repository.StateRepository;
 import jakarta.validation.Validator;
@@ -34,7 +34,7 @@ class CountryServiceImplTest {
     private Validator validator;
 
     @Mock
-    private ApiMapper apiMapper;
+    private CountryMapper countryMapper;
 
     @InjectMocks
     private CountryServiceImpl countryService;
@@ -51,7 +51,7 @@ class CountryServiceImplTest {
         dto.setCode("VN");
 
         when(repository.findById(id)).thenReturn(Optional.of(country));
-        when(apiMapper.entityToDTO(country)).thenReturn(dto);
+        when(countryMapper.toDTO(country)).thenReturn(dto);
 
         CountryDTO result = countryService.getById(id);
 
@@ -81,7 +81,7 @@ class CountryServiceImplTest {
         List<CountryDTO> dtos = Arrays.asList(dto);
 
         when(repository.findByCode(code)).thenReturn(countries);
-        when(apiMapper.entityToDTO(countries)).thenReturn(dtos);
+        when(countryMapper.toDTOList(countries)).thenReturn(dtos);
 
         List<CountryDTO> result = countryService.getByCode(code);
 
@@ -94,7 +94,7 @@ class CountryServiceImplTest {
     void getByCode_WhenNotExists_ReturnsEmptyList() {
         String code = "XX";
         when(repository.findByCode(code)).thenReturn(Collections.emptyList());
-        when(apiMapper.entityToDTO(Collections.<Country>emptyList())).thenReturn(Collections.emptyList());
+        when(countryMapper.toDTOList(Collections.<Country>emptyList())).thenReturn(Collections.emptyList());
 
         List<CountryDTO> result = countryService.getByCode(code);
 
@@ -110,10 +110,10 @@ class CountryServiceImplTest {
         Country entity = new Country();
         entity.setCode("US");
 
-        when(apiMapper.DTOToEntity(dto)).thenReturn(entity);
+        when(countryMapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(any(Country.class))).thenReturn(entity);
         when(validator.validate(any(Country.class))).thenReturn(Collections.emptySet());
-        when(apiMapper.entityToDTO(entity)).thenReturn(dto);
+        when(countryMapper.toDTO(entity)).thenReturn(dto);
 
         CountryDTO result = countryService.save(dto);
 

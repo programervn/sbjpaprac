@@ -50,8 +50,9 @@ public class Country extends Base implements Serializable {
     @JoinColumn(name = "CURRENCY_ID", nullable = false)
     private Currency currency;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id", nullable = false, updatable = false, insertable = false)
-    @OrderBy(value = "code")
-    private List<State> states;
+    // @OneToMany(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "country_id", nullable = false, updatable = false,
+    // insertable = false)
+    // @OrderBy(value = "code")
+    // private List<State> states;
 }
