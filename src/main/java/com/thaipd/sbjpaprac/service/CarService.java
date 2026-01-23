@@ -27,4 +27,6 @@ public interface CarService {
     List<CarDTO> getCarsByBrandSortedByYear(String brand);
 
     Page<CarDTO> searchCars(CarSearchCriteria criteria, Pageable pageable);
+
+    List<CarDTO> getCarsByOwner(Long ownerId);
 }

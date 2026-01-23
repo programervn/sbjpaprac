@@ -29,4 +29,8 @@ public class Car {
     private Integer modelYear;
     @Column(precision = 12, scale = 2)
     private BigDecimal price;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner")
+    private Owner owner;
 }

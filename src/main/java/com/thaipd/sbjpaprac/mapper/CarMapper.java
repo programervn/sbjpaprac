@@ -7,7 +7,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { OwnerMapper.class })
 public interface CarMapper {
     CarDTO toDTO(Car car);
 

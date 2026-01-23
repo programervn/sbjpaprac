@@ -92,4 +92,10 @@ public class CarServiceImpl implements CarService {
         Page<Car> carPage = carRepository.findAll(spec, pageable);
         return carPage.map(carMapper::toDTO);
     }
+
+    @Override
+    public List<CarDTO> getCarsByOwner(Long ownerId) {
+        List<Car> cars = carRepository.findByOwner_Ownerid(ownerId);
+        return carMapper.toDTOs(cars);
+    }
 }

@@ -16,4 +16,6 @@ public class CarDTO {
     private String brand, model, color, registrationNumber;
     private Integer modelYear;
     private BigDecimal price;
+
+    private OwnerDTO owner;
 }

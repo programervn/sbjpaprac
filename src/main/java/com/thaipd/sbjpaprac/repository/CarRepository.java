@@ -19,4 +19,7 @@ public interface CarRepository extends JpaRepository<Car, Long>, JpaSpecificatio
 
     // Fetch cars by brand and sort by year
     List<Car> findByBrandOrderByModelYearAsc(String brand);
+
+    // Fetch cars by owner id
+    List<Car> findByOwner_Ownerid(Long ownerId);
 }
