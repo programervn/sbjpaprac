@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.thaipd.sbjpaprac.dto.ValidationErrorDTO;
 import com.thaipd.sbjpaprac.dto.ViolationDTO;
 
+import lombok.extern.slf4j.Slf4j;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
+@Slf4j
 @ControllerAdvice
 public class ErrorHandlingControllerAdvice {
 
@@ -20,6 +22,7 @@ public class ErrorHandlingControllerAdvice {
     @ResponseBody
     ValidationErrorDTO onConstraintValidationException(
             ConstraintViolationException e) {
+        log.error("Validation error: {}", e.getMessage());
         ValidationErrorDTO error = new ValidationErrorDTO();
         for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
             error.getViolations().add(

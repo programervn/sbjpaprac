@@ -9,12 +9,14 @@ import com.thaipd.sbjpaprac.mapper.ApiMapper;
 import com.thaipd.sbjpaprac.repository.CurrencyRepository;
 import com.thaipd.sbjpaprac.service.CurrencyService;
 
+import lombok.extern.slf4j.Slf4j;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
 
@@ -30,30 +32,39 @@ public class CurrencyServiceImpl implements CurrencyService {
 	}
 
 	public CurrencyDTO getById(Long id) {
+		log.debug("Fetching currency by id: {}", id);
 		CurrencyDTO response = null;
 		Optional<Currency> currency = repository.findById(id);
 
 		if (currency.isPresent()) {
 			response = apiMapper.entityToDTO(currency.get());
+		} else {
+			log.warn("Currency not found with id: {}", id);
 		}
 
 		return response;
 	}
 
 	public CurrencyDTO save(CurrencyDTO currency) {
+		log.info("Saving currency: {}", currency.getCode());
 		return saveInformation(currency);
 	}
 
 	public CurrencyDTO update(CurrencyDTO currency) {
+		log.info("Updating currency: {}", currency.getCode());
 		return saveInformation(currency);
 	}
 
 	public void delete(Long id) {
+		log.warn("Deleting currency with id: {}", id);
 		Optional<Currency> currency = repository.findById(id);
 
 		if (currency.isPresent()) {
 			currency.get().setEnabled(Boolean.FALSE);
 			repository.save(currency.get());
+			log.info("Currency deleted with id: {}", id);
+		} else {
+			log.error("Currency not found with id: {}", id);
 		}
 	}
 

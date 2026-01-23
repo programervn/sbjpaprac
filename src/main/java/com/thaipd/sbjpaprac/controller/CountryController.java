@@ -1,6 +1,5 @@
 package com.thaipd.sbjpaprac.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,20 +8,20 @@ import java.util.List;
 
 import com.thaipd.sbjpaprac.dto.CountryDTO;
 import com.thaipd.sbjpaprac.service.CountryService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/country")
+@RequiredArgsConstructor
 public class CountryController {
 
-    private CountryService countryService;
-
-    @Autowired
-    public CountryController(CountryService countryService) {
-        this.countryService = countryService;
-    }
+    private final CountryService countryService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CountryDTO> getById(@PathVariable Long id) {
+        log.debug("REST request to get Country : {}", id);
         CountryDTO response = countryService.getById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -35,6 +34,7 @@ public class CountryController {
 
     @PostMapping
     public ResponseEntity<CountryDTO> save(@RequestBody CountryDTO countryDTO) {
+        log.info("REST request to save Country : {}", countryDTO.getName());
         CountryDTO response = countryService.save(countryDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -47,18 +47,7 @@ public class CountryController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) throws InterruptedException {
-
-        try {
-
-            // Start the transaction
-
-            // Call the service method
-
-            // Commit the transaction
-        } catch (RuntimeException e) {
-            // Rollback the transaction
-        }
-
+        log.warn("REST request to delete Country : {}", id);
         countryService.delete(id);
         return ResponseEntity.ok().build();
     }

@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Service
 @Slf4j
+@Service
 public class CountryServiceImpl implements CountryService {
 
 	CountryRepository countryRepository;
@@ -41,11 +41,14 @@ public class CountryServiceImpl implements CountryService {
 
 	@Transactional
 	public CountryDTO getById(Long id) {
+		log.debug("Fetching country by id: {}", id);
 		CountryDTO response = null;
 		Optional<Country> country = countryRepository.findById(id);
 
 		if (country.isPresent()) {
 			response = apiMapper.entityToDTO(country.get());
+		} else {
+			log.warn("Country not found with id: {}", id);
 		}
 
 		return response;
@@ -53,15 +56,18 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public List<CountryDTO> getByCode(String code) {
+		log.debug("Fetching countries by code: {}", code);
 		List<Country> countries = countryRepository.findByCode(code);
 		return apiMapper.entityToDTO(countries);
 	}
 
 	public CountryDTO save(CountryDTO currency) {
+		log.info("Saving country: {}", currency.getName());
 		return saveInformation(currency);
 	}
 
 	public CountryDTO update(CountryDTO currency) {
+		log.info("Updating country: {}", currency.getName());
 		return saveInformation(currency);
 	}
 

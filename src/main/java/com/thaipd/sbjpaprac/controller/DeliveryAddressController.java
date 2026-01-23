@@ -10,7 +10,9 @@ import com.thaipd.sbjpaprac.dto.DeliveryAddressDTO;
 import com.thaipd.sbjpaprac.service.DeliveryAddressService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/delivery-address")
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class DeliveryAddressController {
     @GetMapping("/{customerId}/{addressId}")
     public ResponseEntity<DeliveryAddressDTO> getDeliveryAddress(@PathVariable Long customerId,
             @PathVariable Long addressId) {
+        log.debug("REST request to get DeliveryAddress for Customer : {} and Address : {}", customerId, addressId);
         return ResponseEntity.ok(deliveryAddressService.getDeliveryAddress(customerId, addressId));
     }
 }

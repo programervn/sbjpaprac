@@ -11,7 +11,9 @@ import com.thaipd.sbjpaprac.repository.CustomerRepository;
 import com.thaipd.sbjpaprac.service.DeliveryAddressService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DeliveryAddressServiceImpl implements DeliveryAddressService {
@@ -22,10 +24,17 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
 
     @Override
     public DeliveryAddressDTO getDeliveryAddress(Long customerId, Long addressId) {
+        log.debug("Fetching delivery address for customerId: {} and addressId: {}", customerId, addressId);
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> {
+                    log.error("Customer not found with id: {}", customerId);
+                    return new RuntimeException("Customer not found");
+                });
         Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new RuntimeException("Address not found"));
+                .orElseThrow(() -> {
+                    log.error("Address not found with id: {}", addressId);
+                    return new RuntimeException("Address not found");
+                });
 
         return deliveryAddressMapper.getDeliveryAddress(customer, address);
     }

@@ -3,12 +3,14 @@ package com.thaipd.sbjpaprac.controller;
 import com.thaipd.sbjpaprac.dto.CustomerDTO;
 import com.thaipd.sbjpaprac.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/customers")
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<CustomerDTO> create(@RequestBody CustomerDTO customerDTO) {
+        log.info("REST request to save Customer : {}", customerDTO.firstName());
         CustomerDTO created = customerService.create(customerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -42,6 +45,7 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
+        log.warn("REST request to delete Customer : {}", id);
         customerService.delete(id);
         return ResponseEntity.noContent().build();
     }

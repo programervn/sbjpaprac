@@ -11,28 +11,37 @@ import com.thaipd.sbjpaprac.dto.CarSearchCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/cars")
 @RequiredArgsConstructor
+@Tag(name = "Car Management", description = "Endpoints for managing cars")
 public class CarController {
 
     private final CarService carService;
 
     @PostMapping
+    @Operation(summary = "Create a new car")
     public ResponseEntity<CarDTO> createCar(@RequestBody CarDTO carDTO) {
+        log.info("REST request to save car: {}", carDTO.getRegistrationNumber());
         CarDTO createdCar = carService.createCar(carDTO);
         return new ResponseEntity<>(createdCar, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get car by ID")
     public ResponseEntity<CarDTO> getCarById(@PathVariable Long id) {
         CarDTO carDTO = carService.getCarById(id);
         return ResponseEntity.ok(carDTO);
     }
 
     @GetMapping
+    @Operation(summary = "Get all cars")
     public ResponseEntity<List<CarDTO>> getAllCars() {
         List<CarDTO> cars = carService.getAllCars();
         return ResponseEntity.ok(cars);
@@ -46,6 +55,7 @@ public class CarController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
+        log.info("REST request to delete car: {}", id);
         carService.deleteCar(id);
         return ResponseEntity.noContent().build();
     }
@@ -71,6 +81,7 @@ public class CarController {
     }
 
     @GetMapping("/search")
+    @Operation(summary = "Search cars with pagination and filtering")
     public ResponseEntity<Page<CarDTO>> searchCars(
             CarSearchCriteria criteria,
             @PageableDefault(size = 10, sort = "id") Pageable pageable) {
