@@ -1,0 +1,95 @@
+package com.thaipd.sbjpaprac.service.impl;
+
+import com.thaipd.sbjpaprac.dto.CarDTO;
+import com.thaipd.sbjpaprac.entity.Car;
+import com.thaipd.sbjpaprac.mapper.CarMapper;
+import com.thaipd.sbjpaprac.repository.CarRepository;
+import com.thaipd.sbjpaprac.service.CarService;
+import lombok.RequiredArgsConstructor;
+import com.thaipd.sbjpaprac.dto.CarSearchCriteria;
+import com.thaipd.sbjpaprac.repository.specification.CarSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class CarServiceImpl implements CarService {
+
+    private final CarRepository carRepository;
+    private final CarMapper carMapper;
+
+    @Override
+    public List<CarDTO> getAllCars() {
+        List<Car> cars = carRepository.findAll();
+        return carMapper.toDTOs(cars);
+    }
+
+    @Override
+    public CarDTO getCarById(Long id) {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Car not found with id: " + id));
+        return carMapper.toDTO(car);
+    }
+
+    @Override
+    public CarDTO createCar(CarDTO carDTO) {
+        Car car = carMapper.toEntity(carDTO);
+        Car savedCar = carRepository.save(car);
+        return carMapper.toDTO(savedCar);
+    }
+
+    @Override
+    public CarDTO updateCar(Long id, CarDTO carDTO) {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Car not found with id: " + id));
+
+        carMapper.updateEntityFromDTO(carDTO, car);
+        Car updatedCar = carRepository.save(car);
+        return carMapper.toDTO(updatedCar);
+    }
+
+    @Override
+    public void deleteCar(Long id) {
+        if (!carRepository.existsById(id)) {
+            throw new RuntimeException("Car not found with id: " + id);
+        }
+        carRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CarDTO> getCarsByBrand(String brand) {
+        List<Car> cars = carRepository.findByBrand(brand);
+        return carMapper.toDTOs(cars);
+    }
+
+    @Override
+    public List<CarDTO> getCarsByColor(String color) {
+        List<Car> cars = carRepository.findByColor(color);
+        return carMapper.toDTOs(cars);
+    }
+
+    @Override
+    public List<CarDTO> getCarsByModelYear(int modelYear) {
+        List<Car> cars = carRepository.findByModelYear(modelYear);
+        return carMapper.toDTOs(cars);
+    }
+
+    @Override
+    public List<CarDTO> getCarsByBrandSortedByYear(String brand) {
+        List<Car> cars = carRepository.findByBrandOrderByModelYearAsc(brand);
+        return carMapper.toDTOs(cars);
+    }
+
+    @Override
+    public Page<CarDTO> searchCars(CarSearchCriteria criteria, Pageable pageable) {
+        Specification<Car> spec = CarSpecification.getSpec(criteria);
+        Page<Car> carPage = carRepository.findAll(spec, pageable);
+        return carPage.map(carMapper::toDTO);
+    }
+}

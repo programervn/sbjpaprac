@@ -5,3 +5,8 @@ https://viblo.asia/p/huong-dan-su-dung-mapstruct-lombok-aNj4vP08L6r
 
 https://viblo.asia/p/spring-boot-mapstruct-lombok-khong-su-dung-maven-compiler-plugin-obA46Ov9JKv
 
+# Book
+    Full Stack Development with Spring Boot 3 and React Fourth Edition
+# Branch
+    jpaprac/step1: Prac lại jpa từ đầu
+    

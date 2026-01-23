@@ -22,7 +22,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate #Check if the entities have the same structure in the database the entities have the same structure in the database
+      ddl-auto: update #Check if the entities have the same structure in the database the entities have the same structure in the database
     show-sql: true #Show the queries that are created for Spring Data
     generate-ddl: false # Switches the feature on and off and is vendor independent
     properties:
